@@ -1,10 +1,9 @@
-import CardAsk from "./CardAsk";
-import CardBid from "./CardBid";
+import CardBidAsk from "./CardBidAsk";
 
 function CardGrid() {
 	return (
 		<div className='flex w-full justify-center'>
-			<CardBid />
+			<CardBidAsk />
 		</div>
 	);
 }

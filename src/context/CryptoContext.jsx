@@ -9,14 +9,16 @@ export function useCryptoContext() {
 }
 
 export default function ContextProvider({ children }) {
-	const [productId, setProductId] = useState(["BTC-USD"]);
+	const [productId, setProductId] = useState(["LTC-USD"]);
 	const [bestBid, setBestBid] = useState([]);
 	const [bestAsk, setBestAsk] = useState([]);
 	const [time, setTime] = useState([]);
 	const [chartData, setChartData] = useState([]);
+	const [changeIncrement, setChangeIncrement] = useState("");
+	const [theme, setTheme] = useState("dark");
+	const colorTheme = theme === "dark" ? "light" : "dark";
 	const [OrderBookDetailsSells, setOrderBookDetailsSells] = useState([
 		{
-			product_id: productId ? productId : ["BTC-USD"],
 			price: "0",
 			last_size: "0",
 			best_bid: "0",
@@ -25,7 +27,6 @@ export default function ContextProvider({ children }) {
 	]);
 	const [OrderBookDetailsBuys, setOrderBookDetailsBuys] = useState([
 		{
-			product_id: productId ? productId : ["BTC-USD"],
 			price: "0",
 			last_size: "0",
 			best_bid: "0",
@@ -33,15 +34,11 @@ export default function ContextProvider({ children }) {
 		},
 	]);
 
-	const messagesEndRefBids = useRef(null);
 	const messagesEndRefAsks = useRef(null);
-	const messagesEndRefMarketSizeBids = useRef(null);
 	const messagesEndRefMarketSizeAsks = useRef(null);
 	const scrollToBottom = () => {
-		messagesEndRefAsks.current.scrollIntoView({ behavior: "smooth" });
-		messagesEndRefBids.current.scrollIntoView({ behavior: "smooth" });
+		messagesEndRefAsks.current.scrollIntoView();
 		messagesEndRefMarketSizeAsks.current.scrollIntoView({ behavior: "smooth" });
-		messagesEndRefMarketSizeBids.current.scrollIntoView({ behavior: "smooth" });
 	};
 
 	const { readyState, sendJsonMessage, lastJsonMessage } = useWebSocket(
@@ -50,14 +47,12 @@ export default function ContextProvider({ children }) {
 
 	useEffect(() => {
 		scrollToBottom();
-	}, [
-		messagesEndRefBids,
-		messagesEndRefAsks,
-		messagesEndRefMarketSizeBids,
-		messagesEndRefMarketSizeAsks,
-	]);
+	}, [OrderBookDetailsSells, messagesEndRefAsks, messagesEndRefMarketSizeAsks]);
 
 	useEffect(() => {
+		const root = window.document.documentElement;
+		root.classList.remove(colorTheme);
+		root.classList.add(theme);
 		// check if websocket is open
 		if (readyState === ReadyState.OPEN) {
 			sendJsonMessage({
@@ -66,19 +61,18 @@ export default function ContextProvider({ children }) {
 				channels: ["ticker"],
 			});
 		}
-	}, [productId, readyState, sendJsonMessage]);
+	}, [productId, readyState, sendJsonMessage, theme]);
 
 	useEffect(() => {
 		if (lastJsonMessage && lastJsonMessage?.product_id === productId[0]) {
 			setTime((prevTime) => [
 				...prevTime,
-				lastJsonMessage.time.split("-")[2]?.substring(3, 18),
+				lastJsonMessage.time.split("-")[2]?.substring(3, 11),
 			]);
 			setBestAsk((prevAsk) => [...prevAsk, lastJsonMessage.best_ask]);
 			setBestBid((prevBid) => [...prevBid, lastJsonMessage.best_bid]);
 			setChartData(formatDataForChart(time, bestBid, bestAsk));
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [lastJsonMessage, productId]);
 
 	useEffect(() => {
@@ -88,7 +82,7 @@ export default function ContextProvider({ children }) {
 				{
 					price: lastJsonMessage?.price,
 					last_size: lastJsonMessage?.last_size,
-					best_bid: lastJsonMessage?.best_bid,
+					best_bid: Number(lastJsonMessage?.best_bid),
 				},
 			]);
 		}
@@ -98,11 +92,10 @@ export default function ContextProvider({ children }) {
 				{
 					price: lastJsonMessage?.price,
 					last_size: lastJsonMessage?.last_size,
-					best_ask: lastJsonMessage?.best_ask,
+					best_ask: Number(lastJsonMessage?.best_ask),
 				},
 			]);
 		}
-		// scrollToBottom();
 	}, [lastJsonMessage, setOrderBookDetailsBuys, setOrderBookDetailsSells]);
 
 	const formatDataForChart = (time, bestBid, bestAsk) => {
@@ -111,6 +104,7 @@ export default function ContextProvider({ children }) {
 		});
 		return arr;
 	};
+
 	return (
 		<GlobalContext.Provider
 			value={{
@@ -118,6 +112,7 @@ export default function ContextProvider({ children }) {
 				sendJsonMessage,
 				setBestAsk,
 				setBestBid,
+				setChangeIncrement,
 				time,
 				lastJsonMessage,
 				productId,
@@ -126,10 +121,11 @@ export default function ContextProvider({ children }) {
 				bestBid,
 				OrderBookDetailsBuys,
 				OrderBookDetailsSells,
-				messagesEndRefBids,
 				messagesEndRefAsks,
-				messagesEndRefMarketSizeBids,
 				messagesEndRefMarketSizeAsks,
+				setTheme,
+				colorTheme,
+				theme,
 			}}
 		>
 			{children}
