@@ -14,7 +14,11 @@ function App() {
 						onClick={() => setTheme(colorTheme)}
 						className='transition duration-150'
 					>
-						{colorTheme === "dark" ? <FaMoon /> : <FaRegLightbulb />}
+						{colorTheme === "dark" ? (
+							<FaMoon />
+						) : (
+							<FaRegLightbulb color='white' />
+						)}
 					</span>
 					<h1 className='text-center text-2xl dark:text-white'>
 						Select a Crypto Currency
