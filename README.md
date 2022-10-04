@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+## How to use
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Download the code and use npm install to install dependencies
 
-## Available Scripts
+    npm install
 
-In the project directory, you can run:
+After use npm start to start local server
 
-### `npm start`
+    npm start
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+![enter image description here](https://i.imgur.com/5Ogu0PC.png)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+![enter image description here](https://i.imgur.com/SfMWL8l.png)
 
-### `npm test`
+## Technologies used
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+I used the coin base **WebSocket API** to get the data for the order book, chart, and card
+**Tailwindcss** for easy and fast styling
+**React** to build the entire project
+**Context API** as my state management tool to manage my state
+**Recharts** to show the data in the chart
 
-### `npm run build`
+**How it works?**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+I first get the data from the coinbase WebSocket API. I use react and use WebSocket library for ease of use. I check is the connection is open and send a JSON message with the data I want.
+I use two channels from the coinbase API to get what I need. The ticket_batch channel gets real-time data of the best bids and asks every 5 milliseconds and the level2_batch channel gets the order book data.
+![enter image description here](https://i.imgur.com/rZ1rUVc.png)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+I created this card component to display the best bids and asks along with the price and the crypto currency we are displaying data for. The dropdown menu selects which type of cryptocurrency we are going to use.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+I store this pair in a variable and pass it down to the context so that when the user selects it's choice its' stored and we can use it to send the JSON message to the server and get the data back.
+![enter image description here](https://i.imgur.com/GZFyeqU.png)
+![enter image description here](https://i.imgur.com/iem4rTD.png)
 
-### `npm run eject`
+![enter image description here](https://i.imgur.com/47Q7Otg.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+I used a second use effect to check if there is a localJsonMessage and I checked if the message is a ticker and the productID is the one I selected from the card component (read above).  
+If everything is true we store the data in different states and we also create a chart array of data to display in the chart.
+After all the data stored I pass it down to the card component and display it.
+![enter image description here](https://i.imgur.com/DKl4SIA.png)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The second useEffect check whether the data received is a level2 type, if so we store it in tow states one for bids and one for asks then we display it in the OrderBook component.
+![enter image description here](https://i.imgur.com/QV93508.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+OrerBook Component
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+![enter image description here](https://i.imgur.com/1LPWxUL.png)
 
-## Learn More
+If you have any questions please email me at me@jonathanaldas.com
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Take a look at these couple examples that I have in my own portfolio:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Transaction Management App:** https://github.com/alecortega/palettable
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Sweet Treats (Hackathon Win):** https://github.com/jonaaldas/Hackathon-sweet-treats-heroku
