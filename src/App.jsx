@@ -1,5 +1,5 @@
 import CurrencySelectorCard from "./components/CurrencySelectorCard";
-import CardGrid from "./components/CardGrid";
+import CardBidAsk from "./components/CardBidAsk";
 import Chart from "./components/Chart";
 import OrderBook from "./components/OrderBook";
 import { FaMoon, FaRegLightbulb } from "react-icons/fa";
@@ -20,7 +20,7 @@ function App() {
 						Select a Crypto Currency
 					</h1>
 					<CurrencySelectorCard />
-					<CardGrid />
+					<CardBidAsk />
 				</div>
 				<div className='col-start-3 row-start-1 row-end-3 '>
 					<OrderBook />
