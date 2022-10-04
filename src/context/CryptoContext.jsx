@@ -9,7 +9,7 @@ export function useCryptoContext() {
 }
 
 export default function ContextProvider({ children }) {
-	const [productId, setProductId] = useState(["LTC-USD"]);
+	const [productId, setProductId] = useState(["ETH-USD"]);
 	const [bestBid, setBestBid] = useState([]);
 	const [bestAsk, setBestAsk] = useState([]);
 	const [time, setTime] = useState([]);
@@ -37,7 +37,7 @@ export default function ContextProvider({ children }) {
 	const messagesEndRefAsks = useRef(null);
 	const messagesEndRefMarketSizeAsks = useRef(null);
 	const scrollToBottom = () => {
-		messagesEndRefAsks.current.scrollIntoView();
+		messagesEndRefAsks.current.scrollIntoView({ behavior: "smooth" });
 		messagesEndRefMarketSizeAsks.current.scrollIntoView({ behavior: "smooth" });
 	};
 
@@ -61,7 +61,7 @@ export default function ContextProvider({ children }) {
 				channels: ["ticker"],
 			});
 		}
-	}, [productId, readyState, sendJsonMessage, theme]);
+	}, [colorTheme, productId, readyState, sendJsonMessage, theme]);
 
 	useEffect(() => {
 		if (lastJsonMessage && lastJsonMessage?.product_id === productId[0]) {
@@ -73,6 +73,7 @@ export default function ContextProvider({ children }) {
 			setBestBid((prevBid) => [...prevBid, lastJsonMessage.best_bid]);
 			setChartData(formatDataForChart(time, bestBid, bestAsk));
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [lastJsonMessage, productId]);
 
 	useEffect(() => {

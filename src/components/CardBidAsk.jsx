@@ -12,7 +12,7 @@ function CardBidAsk() {
 					<div className='font-bold text-xl mb-2 dark:text-white'>Best Bid</div>
 					<p className='dark:text-white'>
 						Bid Price:
-						<span className='text-green-800 '>
+						<span className='text-green-800 dark:text-green-900'>
 							{lastJsonMessage?.best_bid}{" "}
 						</span>
 					</p>

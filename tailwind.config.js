@@ -6,7 +6,7 @@ module.exports = {
   ],
   theme: {
     minHeight: {
-      'mid': '21rem',
+      'mid': '18rem',
     }
   },
   plugins: [],

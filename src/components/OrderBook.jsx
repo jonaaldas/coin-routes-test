@@ -66,7 +66,7 @@ function OrderBook() {
 			</div>
 			<hr />
 			<div className='flex justify-around'>
-				<span className='dark:text-white'>{lastJsonMessage?.price}</span>
+				{/* <span className='dark:text-white'>{lastJsonMessage?.price}</span> */}
 				<span className='dark:text-white'>Spread {spread.toFixed(4)}</span>
 			</div>
 			<hr />
